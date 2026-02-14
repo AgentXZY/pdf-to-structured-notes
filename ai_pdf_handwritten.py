@@ -12,18 +12,23 @@ Original file is located at
 
 # Install Python power-tools
 !pip install pytesseract pdf2image transformers torch
+!pip install transformers==4.35.2
 
 import re
 import os
 import pytesseract
 from pdf2image import convert_from_path
-from transformers import pipeline
+from transformers import AutoModelForSeq2SeqLM, AutoTokenizer, pipeline
 
 class HandwrittenNoteArchitect:
     def __init__(self):
         print("🚀 Initializing FAST AI Summarizer (DistilBART)...")
         # device=-1 uses CPU. If you enable GPU in Colab, change to device=0
-        self.summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6", device=-1)
+        self.summarizer = pipeline(
+        "text2text-generation",
+        model="sshleifer/distilbart-cnn-12-6",
+        device=-1
+        )
         self.headings = []
         self.final_output = ""
 
@@ -65,8 +70,8 @@ class HandwrittenNoteArchitect:
             chunk = " ".join(words[i:i + chunk_size])
             if len(chunk.strip()) > 30: #HERE ITS 100
                 try:
-                    summary = self.summarizer(chunk, max_length=80, min_length=30, do_sample=False)
-                    summarized_chunks.append(summary[0]['summary_text'])
+                      summary = self.summarizer(f"summarize: {chunk}", max_length=80, min_length=30, do_sample=False)
+                      summarized_chunks.append(summary[0]['generated_text'])
                 except Exception:
                     continue
         return " ".join(summarized_chunks)
@@ -148,7 +153,7 @@ class HandwrittenNoteArchitect:
 architect = HandwrittenNoteArchitect()
 
 # Change this to your uploaded file name!
-PDF_FILE_PATH = "/content/Lecture  1.1.1-merged.pdf"
+PDF_FILE_PATH = "/content/ocean.pdf"
 
 if os.path.exists(PDF_FILE_PATH):
     final_notes = architect.process_pdf(PDF_FILE_PATH)
