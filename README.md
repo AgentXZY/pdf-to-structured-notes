@@ -1,3 +1,30 @@
+```mermaid
+flowchart TD
+
+    %% ===== INPUT LAYER =====
+    A[📄 Input PDF<br/>ocean.pdf] --> B[pdf2image<br/>Convert PDF → Images]
+    B --> C[pytesseract OCR<br/>Extract Raw Text]
+    C --> D[Full Text Buffer]
+
+    %% ===== INTELLIGENCE LAYER =====
+    D --> E[get_dynamic_headings()<br/>Regex Heading Detection]
+    D --> F[clean_text()<br/>OCR Noise Cleanup]
+
+    E --> G[Sequential Section Engine<br/>("Finger Logic")]
+    F --> G
+
+    G --> H[summarize_block()<br/>Chunking (600 words)]
+    H --> I[DistilBART Model<br/>sshleifer/distilbart-cnn-12-6]
+
+    %% ===== OUTPUT STRUCTURING =====
+    I --> J[Structured Markdown Notes<br/>### Heading + Summary]
+    J --> K[handwritten_ready_notes.txt]
+
+    %% ===== RENDERING LAYER =====
+    J --> L[HandwrittenNoteRenderer<br/>FPDF2 + Custom Font]
+    L --> M[Professional_Handwritten_Notes.pdf<br/>Notebook Styled Output]
+```
+
 # pdf-to-structured-notes
 An OCR and summarization pipeline that transforms long academic PDFs into readable, structured notes, designed to reduce revision time and cognitive load during exam prep.
 
