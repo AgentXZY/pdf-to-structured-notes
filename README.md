@@ -1,25 +1,5 @@
-```mermaid
-flowchart TD
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/096117a6-a112-43ff-ae54-00148f7b51b6" />
 
-    A[Input PDF ocean.pdf] --> B[pdf2image Convert PDF to Images]
-    B --> C[pytesseract OCR Extract Raw Text]
-    C --> D[Full Text Buffer]
-
-    D --> E[get_dynamic_headings - Regex Detection]
-    D --> F[clean_text - OCR Cleanup]
-
-    E --> G[Sequential Section Engine]
-    F --> G
-
-    G --> H[summarize_block - Chunking 600 words]
-    H --> I[DistilBART Model]
-
-    I --> J[Structured Markdown Notes]
-    J --> K[handwritten_ready_notes.txt]
-
-    J --> L[HandwrittenNoteRenderer FPDF2]
-    L --> M[Professional_Handwritten_Notes.pdf]
-```
 # pdf-to-structured-notes
 An OCR and summarization pipeline that transforms long academic PDFs into readable, structured notes, designed to reduce revision time and cognitive load during exam prep.
 
